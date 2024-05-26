@@ -13,6 +13,7 @@ app.get('/proxy', async (req, res) => {
     }
 
     try {
+        console.log(`Fetching URL: ${url}`);
         const response = await axios.get(url);
         const $ = cheerio.load(response.data);
 
@@ -39,7 +40,7 @@ app.get('/proxy', async (req, res) => {
         res.send($.html());
     } catch (error) {
         console.error('Error fetching URL:', error.message);
-        res.status(500).send('Error fetching the URL');
+        res.status(500).send(`Error fetching the URL: ${error.message}`);
     }
 });
 
