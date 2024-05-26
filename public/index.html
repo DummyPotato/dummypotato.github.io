@@ -50,14 +50,13 @@
             }
 
             try {
-                const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`);
+                const response = await fetch(`/puppeteer?url=${encodeURIComponent(url)}`);
                 if (response.ok) {
                     const content = await response.text();
                     document.getElementById('content').innerHTML = content;
                     applyInternalLinkHandler();
                 } else {
                     alert('Failed to load content');
-                    console.error('Failed to load content:', response.statusText);
                 }
             } catch (error) {
                 console.error('Error loading page:', error);
@@ -79,14 +78,13 @@
 
         async function loadInternalPage(url) {
             try {
-                const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`);
+                const response = await fetch(`/puppeteer?url=${encodeURIComponent(url)}`);
                 if (response.ok) {
                     const content = await response.text();
                     document.getElementById('content').innerHTML = content;
                     applyInternalLinkHandler();
                 } else {
                     alert('Failed to load content');
-                    console.error('Failed to load content:', response.statusText);
                 }
             } catch (error) {
                 console.error('Error loading page:', error);
