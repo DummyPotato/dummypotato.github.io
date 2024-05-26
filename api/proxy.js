@@ -1,6 +1,6 @@
-const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const express = require('express');
 
 const app = express();
 
@@ -14,17 +14,25 @@ app.get('/proxy', async (req, res) => {
         const response = await axios.get(url);
         const $ = cheerio.load(response.data);
 
-        // Rewrite URLs for CSS, JS, and image resources
-        $('link[href], script[src], img[src]').each((index, element) => {
-            const attribute = element.tagName === 'link' ? 'href' : 'src';
+        // Rewrite URLs for CSS, JS, image resources, and internal links
+        $('link[href], script[src], img[src], a[href]').each((index, element) => {
+            const attribute = element.tagName === 'link' || element.tagName === 'a' ? 'href' : 'src';
             const src = $(element).attr(attribute);
-            if (src && !src.startsWith('http') && !src.startsWith('https')) {
+            if (src && !src.startsWith('http') && !src.startsWith('https') && !src.startsWith('mailto:')) {
                 $(element).attr(attribute, new URL(src, url).href);
             }
         });
 
         // Add base tag to head to handle relative URLs
         $('head').prepend(`<base href="${url}">`);
+
+        // Rewrite internal links to use the proxy
+        $('a[href]').each((index, element) => {
+            const href = $(element).attr('href');
+            if (href && !href.startsWith('http') && !href.startsWith('https') && !href.startsWith('mailto:')) {
+                $(element).attr('href', `/proxy?url=${encodeURIComponent(new URL(href, url).href)}`);
+            }
+        });
 
         res.send($.html());
     } catch (error) {
