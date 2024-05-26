@@ -49,7 +49,7 @@ app.get('/proxy', async (req, res) => {
 
         res.send($.html());
     } catch (error) {
-        console.error('Error fetching URL:', error.message);
+        console.error('Error fetching URL:', error.message, error.response?.data);
         res.status(500).send(`Error fetching the URL: ${error.message}`);
     }
 });
