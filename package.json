@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node api/proxy.js"
+    "start": "node api/puppeteer.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.10",
     "express": "^4.17.1",
     "cors": "^2.8.5",
-    "node-fetch": "^2.6.1"
+    "puppeteer": "^13.0.0"
   }
 }
