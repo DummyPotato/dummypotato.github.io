@@ -1,4 +1,5 @@
 const axios = require('axios');
+const cheerio = require('cheerio');
 
 module.exports = async (req, res) => {
     const { url } = req.query;
@@ -8,7 +9,21 @@ module.exports = async (req, res) => {
 
     try {
         const response = await axios.get(url);
-        res.send(response.data);
+        const $ = cheerio.load(response.data);
+
+        // Rewrite URLs for CSS, JS, and image resources
+        $('link[href], script[src], img[src]').each((index, element) => {
+            const attribute = element.tagName === 'link' ? 'href' : 'src';
+            const src = $(element).attr(attribute);
+            if (src && !src.startsWith('http') && !src.startsWith('https')) {
+                $(element).attr(attribute, new URL(src, url).href);
+            }
+        });
+
+        // Add base tag to head to handle relative URLs
+        $('head').prepend(`<base href="${url}">`);
+
+        res.send($.html());
     } catch (error) {
         console.error('Error fetching URL:', error.message);
         res.status(500).send('Error fetching the URL');
