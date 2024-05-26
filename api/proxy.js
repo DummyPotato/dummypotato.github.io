@@ -42,11 +42,6 @@ app.get('/proxy', async (req, res) => {
             }
         });
 
-        // Add custom headers to handle CORS
-        res.set('Access-Control-Allow-Origin', '*');
-        res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
         res.send($.html());
     } catch (error) {
         console.error('Error fetching URL:', error.message, error.response ? error.response.data : '');
