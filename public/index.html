@@ -54,6 +54,43 @@
                 if (response.ok) {
                     const content = await response.text();
                     document.getElementById('content').innerHTML = content;
+
+                    // Re-apply event listeners for internal links
+                    document.querySelectorAll('a').forEach(a => {
+                        a.addEventListener('click', event => {
+                            event.preventDefault();
+                            const href = a.getAttribute('href');
+                            if (href) {
+                                loadInternalPage(href);
+                            }
+                        });
+                    });
+                } else {
+                    alert('Failed to load content');
+                }
+            } catch (error) {
+                console.error('Error loading page:', error);
+                alert('Error loading page');
+            }
+        }
+
+        async function loadInternalPage(url) {
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    const content = await response.text();
+                    document.getElementById('content').innerHTML = content;
+
+                    // Re-apply event listeners for internal links
+                    document.querySelectorAll('a').forEach(a => {
+                        a.addEventListener('click', event => {
+                            event.preventDefault();
+                            const href = a.getAttribute('href');
+                            if (href) {
+                                loadInternalPage(href);
+                            }
+                        });
+                    });
                 } else {
                     alert('Failed to load content');
                 }
