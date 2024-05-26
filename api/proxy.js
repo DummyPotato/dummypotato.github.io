@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
-const cheerio = require('cheerio');
 const express = require('express');
+const puppeteer = require('puppeteer');
+const cheerio = require('cheerio');
 const cors = require('cors');
 
 const app = express();
@@ -13,21 +13,16 @@ app.get('/proxy', async (req, res) => {
     }
 
     try {
-        console.log(`Fetching URL: ${url}`);
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
-            },
-            redirect: 'follow'
+        const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: 'networkidle2' });
 
-        if (!response.ok) {
-            console.error(`Failed to fetch: ${response.statusText}`);
-            return res.status(response.status).send(`Failed to fetch: ${response.statusText}`);
-        }
+        const content = await page.content();
+        await browser.close();
 
-        const html = await response.text();
-        const $ = cheerio.load(html);
+        const $ = cheerio.load(content);
 
         // Rewrite URLs for CSS, JS, image resources, and internal links
         $('link[href], script[src], img[src], a[href]').each((index, element) => {
