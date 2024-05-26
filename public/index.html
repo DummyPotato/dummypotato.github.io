@@ -54,17 +54,7 @@
                 if (response.ok) {
                     const content = await response.text();
                     document.getElementById('content').innerHTML = content;
-
-                    // Re-apply event listeners for internal links
-                    document.querySelectorAll('a').forEach(a => {
-                        a.addEventListener('click', event => {
-                            event.preventDefault();
-                            const href = a.getAttribute('href');
-                            if (href) {
-                                loadInternalPage(href);
-                            }
-                        });
-                    });
+                    applyInternalLinkHandler();
                 } else {
                     alert('Failed to load content');
                 }
@@ -74,23 +64,25 @@
             }
         }
 
+        function applyInternalLinkHandler() {
+            document.querySelectorAll('a').forEach(a => {
+                a.addEventListener('click', event => {
+                    event.preventDefault();
+                    const href = a.getAttribute('href');
+                    if (href) {
+                        loadInternalPage(href);
+                    }
+                });
+            });
+        }
+
         async function loadInternalPage(url) {
             try {
-                const response = await fetch(url);
+                const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`);
                 if (response.ok) {
                     const content = await response.text();
                     document.getElementById('content').innerHTML = content;
-
-                    // Re-apply event listeners for internal links
-                    document.querySelectorAll('a').forEach(a => {
-                        a.addEventListener('click', event => {
-                            event.preventDefault();
-                            const href = a.getAttribute('href');
-                            if (href) {
-                                loadInternalPage(href);
-                            }
-                        });
-                    });
+                    applyInternalLinkHandler();
                 } else {
                     alert('Failed to load content');
                 }
