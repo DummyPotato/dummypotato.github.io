@@ -12,7 +12,7 @@
   ],
   "routes": [
     {
-      "src": "/puppeteer",
+      "src": "/api/puppeteer",
       "dest": "/api/puppeteer.js"
     },
     {
