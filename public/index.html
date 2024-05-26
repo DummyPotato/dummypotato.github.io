@@ -50,7 +50,7 @@
             }
 
             try {
-                const response = await fetch(`/api/puppeteer?url=${encodeURIComponent(url)}`);
+                const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`);
                 if (response.ok) {
                     const content = await response.text();
                     document.getElementById('content').innerHTML = content;
@@ -78,7 +78,7 @@
 
         async function loadInternalPage(url) {
             try {
-                const response = await fetch(`/api/puppeteer?url=${encodeURIComponent(url)}`);
+                const response = await fetch(`/proxy?url=${encodeURIComponent(url)}`);
                 if (response.ok) {
                     const content = await response.text();
                     document.getElementById('content').innerHTML = content;
