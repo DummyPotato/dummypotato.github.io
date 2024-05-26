@@ -1,7 +1,10 @@
+const express = require('express');
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-module.exports = async (req, res) => {
+const app = express();
+
+app.get('/proxy', async (req, res) => {
     const { url } = req.query;
     if (!url) {
         return res.status(400).send('Bad Request: Missing URL parameter');
@@ -28,4 +31,6 @@ module.exports = async (req, res) => {
         console.error('Error fetching URL:', error.message);
         res.status(500).send('Error fetching the URL');
     }
-};
+});
+
+module.exports = app;
