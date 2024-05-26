@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 
 const app = express();
 
-app.get('/puppeteer', async (req, res) => {
+app.get('/api/puppeteer', async (req, res) => {
     const { url } = req.query;
     if (!url) {
         return res.status(400).send('Bad Request: Missing URL parameter');
