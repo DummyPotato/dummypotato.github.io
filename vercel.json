@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/puppeteer.js",
+      "src": "api/proxy.js",
       "use": "@vercel/node"
     },
     {
@@ -12,8 +12,8 @@
   ],
   "routes": [
     {
-      "src": "/api/puppeteer",
-      "dest": "/api/puppeteer.js"
+      "src": "/proxy",
+      "dest": "/api/proxy.js"
     },
     {
       "handle": "filesystem"
