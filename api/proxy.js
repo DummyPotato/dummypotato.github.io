@@ -13,6 +13,7 @@ app.get('/proxy', async (req, res) => {
     }
 
     try {
+        console.log(`Launching Puppeteer for URL: ${url}`);
         const browser = await puppeteer.launch({
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
@@ -21,6 +22,7 @@ app.get('/proxy', async (req, res) => {
 
         const content = await page.content();
         await browser.close();
+        console.log(`Fetched content for URL: ${url}`);
 
         const $ = cheerio.load(content);
 
@@ -50,7 +52,7 @@ app.get('/proxy', async (req, res) => {
 
         res.send($.html());
     } catch (error) {
-        console.error('Error fetching URL:', error.message);
+        console.error('Error fetching URL:', error.message, error.stack);
         res.status(500).send(`Error fetching the URL: ${error.message}`);
     }
 });
